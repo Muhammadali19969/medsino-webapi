@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedSino.Domain", "src\MedSi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedSino.Service", "src\MedSino.Service\MedSino.Service.csproj", "{27C45539-3547-44D4-95EC-210474B92151}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedSino.UnitTest", "test\MedSino.UnitTest\MedSino.UnitTest.csproj", "{DC826BA5-C27A-4605-BCA9-87F75E26BB0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{27C45539-3547-44D4-95EC-210474B92151}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27C45539-3547-44D4-95EC-210474B92151}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27C45539-3547-44D4-95EC-210474B92151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC826BA5-C27A-4605-BCA9-87F75E26BB0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC826BA5-C27A-4605-BCA9-87F75E26BB0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC826BA5-C27A-4605-BCA9-87F75E26BB0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC826BA5-C27A-4605-BCA9-87F75E26BB0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{443EDC88-0672-4837-86E0-0B3FEE3FF7D8} = {AE47D8C3-2B7B-47E2-957C-825316E133ED}
 		{87411A4A-FB52-4830-82E2-397E304D2B81} = {AE47D8C3-2B7B-47E2-957C-825316E133ED}
 		{27C45539-3547-44D4-95EC-210474B92151} = {AE47D8C3-2B7B-47E2-957C-825316E133ED}
+		{DC826BA5-C27A-4605-BCA9-87F75E26BB0F} = {9901953B-C5DD-47F0-A3AF-0A1A1004B21E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F654F14C-FB9B-4A71-A717-25659B725FEE}
