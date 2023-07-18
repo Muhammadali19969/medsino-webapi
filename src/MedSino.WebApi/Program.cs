@@ -1,4 +1,9 @@
 
+using MedSino.DataAccess.Interfaces.Categories;
+using MedSino.DataAccess.Repositories.Categories;
+using MedSino.Service.Interfaces;
+using MedSino.Service.Services.Categories;
+
 namespace MedSino.WebApi
 {
     public class Program
@@ -13,6 +18,9 @@ namespace MedSino.WebApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             var app = builder.Build();
 
