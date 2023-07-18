@@ -1,8 +1,8 @@
 ﻿using MedSino.DataAccess.Utils;
 using MedSino.Domain.Entities.Categories;
-using MedSino.Service.Dtos;
+using MedSino.Service.Dtos.Categories;
 
-namespace MedSino.Service.Interfaces;
+namespace MedSino.Service.Interfaces.Categories;
 
 public interface ICategoryService
 {

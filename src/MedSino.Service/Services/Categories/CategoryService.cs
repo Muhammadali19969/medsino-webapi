@@ -4,8 +4,8 @@ using MedSino.Domain.Entities.Categories;
 using MedSino.Domain.Exceptions.Categories;
 using MedSino.Domain.Exceptions.Files;
 using MedSino.Service.Common.Helpers;
-using MedSino.Service.Dtos;
-using MedSino.Service.Interfaces;
+using MedSino.Service.Dtos.Categories;
+using MedSino.Service.Interfaces.Categories;
 using MedSino.Service.Interfaces.Common;
 
 namespace MedSino.Service.Services.Categories;

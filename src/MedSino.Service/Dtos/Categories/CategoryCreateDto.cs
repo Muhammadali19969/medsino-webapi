@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace MedSino.Service.Dtos;
+namespace MedSino.Service.Dtos.Categories;
 
 public class CategoryCreateDto
 {

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MedSino.Service.Common.Helpers;
-using MedSino.Service.Dtos;
+using MedSino.Service.Dtos.Categories;
 
 namespace MedSino.Service.Validators.Dtos.Categories;
 

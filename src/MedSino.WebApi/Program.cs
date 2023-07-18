@@ -1,10 +1,14 @@
 
 using MedSino.DataAccess.Interfaces.Categories;
+using MedSino.DataAccess.Interfaces.Hospitals;
 using MedSino.DataAccess.Repositories.Categories;
-using MedSino.Service.Interfaces;
+using MedSino.DataAccess.Repositories.Hospitals;
+using MedSino.Service.Interfaces.Categories;
 using MedSino.Service.Interfaces.Common;
+using MedSino.Service.Interfaces.Hospitals;
 using MedSino.Service.Services.Categories;
 using MedSino.Service.Services.Common;
+using MedSino.Service.Services.Hospitals;
 
 namespace MedSino.WebApi
 {
@@ -22,7 +26,10 @@ namespace MedSino.WebApi
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IHospitalRepository, HospitalRepository>();
+
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IHospitalService, HospitalService>();
             builder.Services.AddScoped<IFileService,FileService>();
 
             var app = builder.Build();

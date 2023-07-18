@@ -1,7 +1,7 @@
 ﻿using MedSino.DataAccess.Utils;
 using MedSino.Domain.Entities.Categories;
-using MedSino.Service.Dtos;
-using MedSino.Service.Interfaces;
+using MedSino.Service.Dtos.Categories;
+using MedSino.Service.Interfaces.Categories;
 using MedSino.Service.Validators.Dtos.Categories;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;

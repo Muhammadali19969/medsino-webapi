@@ -1,18 +1,20 @@
-﻿using Dapper;
-using MedSino.DataAccess.Interfaces.Categories;
+﻿
+using Dapper;
+using MedSino.DataAccess.Interfaces.Hospitals;
 using MedSino.DataAccess.Utils;
 using MedSino.Domain.Entities.Categories;
+using MedSino.Domain.Entities.Hospitals;
 
-namespace MedSino.DataAccess.Repositories.Categories;
+namespace MedSino.DataAccess.Repositories.Hospitals;
 
-public class CategoryRepository : BaseRepository, ICategoryRepository
+public class HospitalRepository : BaseRepository, IHospitalRepository
 {
     public async Task<long> CountAsync()
     {
         try
         {
             await _connection.OpenAsync();
-            string query = $"select count(*) from categories";
+            string query = $"select count(*) from hospitals";
             var result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
@@ -24,21 +26,22 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         {
             await _connection.CloseAsync();
         }
-        
     }
 
-    public async Task<int> CreateAsync(Category entity)
+    public async Task<int> CreateAsync(Hospital entity)
     {
         try
         {
             await _connection.OpenAsync();
-            string query = "INSERT INTO public.categories(name, image_path, created_at, updated_at) " +
-                "VALUES (@Name, @ImagePath, @CreatedAt, @UpdatedAt);";
+            string query = "INSERT INTO public.hospitals (name, image_path, description, phone_num1, phone_num2," +
+                " address, region, district, created_at, updated_at) " +
+                "VALUES ( @Name, @ImagePath, @Description, @PhoneNum1, @PhoneNum2, @Address, @Region, @District, @CreatedAt, @UpdatedAt);";
             var result = await _connection.ExecuteAsync(query, entity);
             return result;
         }
-        catch
+        catch (Exception)
         {
+
             return 0;
         }
         finally
@@ -52,11 +55,11 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"delete from categories where id = @Id";
+            string query = $"delete from hospitals where id = @Id";
             var result = await _connection.ExecuteAsync(query, new { Id = id });
             return result;
         }
-        catch 
+        catch
         {
 
             return 0;
@@ -67,40 +70,35 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         }
     }
 
-    public async Task<IList<Category>> GetAllAsync(PaginationParams @params)
+    public async Task<IList<Hospital>> GetAllAsync(PaginationParams @params)
     {
         try
         {
             await _connection.OpenAsync();
-            string query = "select * from categories order by id desc " +
+            string query = "select * from hospitals " +
                 $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
-
-            var result = (await _connection.QueryAsync<Category>(query)).ToList();
+            var result = (await _connection.QueryAsync<Hospital>(query, @params)).ToList();
             return result;
-
         }
         catch (Exception)
         {
 
-            return new List<Category>();
-        }
-        finally
-        {
-            await _connection.CloseAsync();
+            return new List<Hospital>();
         }
     }
 
-    public async Task<Category?> GetByIdAsync(long id)
+    public async Task<Hospital?> GetByIdAsync(long id)
     {
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM categories where id=@Id";
-            var result = await _connection.QuerySingleAsync<Category>(query, new { Id = id });
+            string query = "select * from hospitals where id = @Id";
+            var result = await _connection.QuerySingleAsync<Hospital>(query,new { Id = id });
             return result;
         }
-        catch
+        catch (Exception)
         {
+
             return null;
         }
         finally
@@ -109,20 +107,21 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         }
     }
 
-    public async Task<int> UpdateAsync(long id, Category entity)
+    public async Task<int> UpdateAsync(long id, Hospital entity)
     {
         try
         {
             await _connection.OpenAsync();
-            string query = $"UPDATE public.categories " +
-                $"SET name=@Name, image_path=@ImagePath, created_at=@CreatedAt, updated_at=@UpdatedAt " +
-                $"WHERE id={id};";
-
+            string query = "UPDATE public.hospitals " +
+                "SET  name=@Name, image_path=@ImagePath, description=@Description, phone_num1=@PhoneNum1, phone_num2=@PhoneNum2," +
+                " address=@Address, region=@Region, district=@District, created_at=@CreatedAt, updated_at=@UpdatedAt " +
+                $"WHERE id = {id};";
             var result = await _connection.ExecuteAsync(query, entity);
             return result;
         }
-        catch
+        catch 
         {
+
             return 0;
         }
         finally
