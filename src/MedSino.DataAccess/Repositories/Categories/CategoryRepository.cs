@@ -26,14 +26,44 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         }
     }
 
-    public Task<int> CreateAsync(Category entity)
+    public async Task<int> CreateAsync(Category entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "INSERT INTO public.categories(name, image_path, created_at, updated_at) " +
+                "VALUES (@Name, @ImagePath, @CreatedAt, @UpdatedAt);";
+            var result = await _connection.ExecuteAsync(query, entity);
+            return result;
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
-    public Task<int> DeleteAsync(long id)
+    public async Task<int> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"delete from categories where id = @Id";
+            var result = await _connection.ExecuteAsync(query, new { Id = id });
+            return result;
+        }
+        catch 
+        {
+
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public async Task<IList<Category>> GetAllAsync(PaginationParams @params)
@@ -78,8 +108,25 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         }
     }
 
-    public Task<int> UpdateAsync(long id, Category entity)
+    public async Task<int> UpdateAsync(long id, Category entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"UPDATE public.categories " +
+                $"SET name=@Name, image_path=@ImagePath, created_at=@CreatedAt, updated_at=@UpdatedAt " +
+                $"WHERE id={id};";
+
+            var result = await _connection.ExecuteAsync(query, entity);
+            return result;
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 }

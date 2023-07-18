@@ -2,7 +2,9 @@
 using MedSino.DataAccess.Interfaces.Categories;
 using MedSino.DataAccess.Repositories.Categories;
 using MedSino.Service.Interfaces;
+using MedSino.Service.Interfaces.Common;
 using MedSino.Service.Services.Categories;
+using MedSino.Service.Services.Common;
 
 namespace MedSino.WebApi
 {
@@ -21,6 +23,7 @@ namespace MedSino.WebApi
 
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IFileService,FileService>();
 
             var app = builder.Build();
 

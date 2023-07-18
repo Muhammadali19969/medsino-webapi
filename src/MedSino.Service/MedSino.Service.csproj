@@ -15,4 +15,9 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="FluentValidation" Version="11.6.0" />
+	  <PackageReference Include="SpecFlow" Version="3.9.74" />
+	</ItemGroup>
+
 </Project>

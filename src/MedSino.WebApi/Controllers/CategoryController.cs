@@ -2,6 +2,7 @@
 using MedSino.Domain.Entities.Categories;
 using MedSino.Service.Dtos;
 using MedSino.Service.Interfaces;
+using MedSino.Service.Validators.Dtos.Categories;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
 
@@ -20,15 +21,42 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync([FromForm] int page = 1)
+    public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
         => Ok(await _service.GetAllAsync(new PaginationParams(page, maxPageSize)));
 
     [HttpGet("count")]
     public async Task<IActionResult> CountAsync()
         => Ok(await _service.CountAsync());
 
+
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync([FromForm] CategoryCreateDto dto)
+    {
+        var createValidator = new CategoryCreateValidator();
+        var result = createValidator.Validate(dto);
+        if (result.IsValid) return Ok(await _service.CreateAsync(dto));
+        else return BadRequest(result.Errors);
+    }
+
+
     [HttpGet("{categoryId}")]
-    public async Task<IActionResult> GetByIdAsync(long categoryId, CategoryUpdateDto dto)
+    public async Task<IActionResult> GetByIdAsync(long categoryId)
         => Ok(await _service.GetByIdAsync(categoryId));
-    
+
+
+    [HttpDelete("{categoryId}")]
+    public async Task<IActionResult> DeleteAsync(long categoryId)
+        => Ok(await _service.DeleteAsync(categoryId));
+
+
+    [HttpPut("{categoryId}")]
+    public async Task<IActionResult> UpdateAsync(long categoryId, [FromForm] CategoryUpdateDto dto)
+    {
+        var updateValidator = new CategoryUpdateValidator();
+        var validationResult = updateValidator.Validate(dto);
+        if (validationResult.IsValid) return Ok(await _service.UpdateAsync(categoryId, dto));
+        else return BadRequest(validationResult.Errors);
+    }
 }
+    
+

@@ -15,4 +15,8 @@
     <ProjectReference Include="..\MedSino.Service\MedSino.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\media\images\" />
+  </ItemGroup>
+
 </Project>
