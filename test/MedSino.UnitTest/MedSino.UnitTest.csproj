@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MedSino.WebApi\MedSino.WebApi.csproj" />
+  </ItemGroup>
+
 </Project>

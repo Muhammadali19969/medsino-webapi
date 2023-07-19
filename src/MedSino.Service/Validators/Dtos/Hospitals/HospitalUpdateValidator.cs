@@ -14,7 +14,7 @@ public class HospitalUpdateValidator : AbstractValidator<HospitalUpdateDto>
             .MaximumLength(50).WithMessage("Name must be less than 50 characters");
 
         RuleFor(dto => dto.Description).NotNull().NotEmpty().WithMessage("Description field is required!")
-            .MinimumLength(20).WithMessage("Description field is required!");
+            .MinimumLength(10).WithMessage("Description field is required!");
 
         RuleFor(dto => dto.PhoneNumber1).NotNull().NotEmpty().WithMessage("Phone number field is required!")
             .Must(phone => PhoneNumberValidator.IsValid(phone)).WithMessage("Phone number is incorrect!");
@@ -24,7 +24,6 @@ public class HospitalUpdateValidator : AbstractValidator<HospitalUpdateDto>
         RuleFor(dto => dto.Region).NotNull().NotEmpty().WithMessage("Region field is required!");
 
         RuleFor(dto => dto.District).NotNull().NotEmpty().WithMessage("District field is required!");
-
 
         int maxImageSizeMB = 3;
         RuleFor(dto => dto.Image!.Length).LessThan(maxImageSizeMB * 1024 * 1024 + 1).WithMessage($"Image size must be less than {maxImageSizeMB} MB");
