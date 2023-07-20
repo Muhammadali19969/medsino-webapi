@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace MedSino.Domain.Exceptions.Hospitals;
+﻿namespace MedSino.Domain.Exceptions.Hospitals;
 
 public class HospitalNotFoundException : NotFoundException
 {

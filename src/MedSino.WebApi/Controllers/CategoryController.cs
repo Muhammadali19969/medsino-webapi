@@ -1,10 +1,8 @@
 ﻿using MedSino.DataAccess.Utils;
-using MedSino.Domain.Entities.Categories;
 using MedSino.Service.Dtos.Categories;
 using MedSino.Service.Interfaces.Categories;
 using MedSino.Service.Validators.Dtos.Categories;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
 
 namespace MedSino.WebApi.Controllers;
 
@@ -58,5 +56,5 @@ public class CategoryController : ControllerBase
         else return BadRequest(validationResult.Errors);
     }
 }
-    
+
 

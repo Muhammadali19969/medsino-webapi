@@ -10,7 +10,7 @@ public abstract class Human : Auditable
     public string PasswordHash { get; set; } = string.Empty;
     public string Salt { get; set; } = string.Empty;
     public bool IsMail { get; set; }
-    public string Email { get; set; }=string.Empty;
+    public string Email { get; set; } = string.Empty;
 
 
 

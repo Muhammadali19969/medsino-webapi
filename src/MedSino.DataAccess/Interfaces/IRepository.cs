@@ -1,6 +1,6 @@
 ﻿namespace MedSino.DataAccess.Interfaces;
 
-public interface IRepository<TEntity,TViewModel>
+public interface IRepository<TEntity, TViewModel>
 {
     public Task<int> CreateAsync(TEntity entity);
 

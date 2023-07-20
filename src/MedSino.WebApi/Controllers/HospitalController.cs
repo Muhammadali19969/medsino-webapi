@@ -1,10 +1,8 @@
-﻿using FluentValidation;
-using MedSino.DataAccess.Utils;
+﻿using MedSino.DataAccess.Utils;
 using MedSino.Service.Dtos.Hospitals;
 using MedSino.Service.Interfaces.Hospitals;
 using MedSino.Service.Validators.Dtos.Hospitals;
 using Microsoft.AspNetCore.Mvc;
-using TechTalk.SpecFlow.CommonModels;
 
 namespace MedSino.WebApi.Controllers;
 
@@ -39,7 +37,7 @@ public class HospitalController : ControllerBase
         => Ok(await _service.GetAllAsync(new PaginationParams(page, maxPageSize)));
 
     [HttpPut("{hospitalId}")]
-    public async Task<IActionResult> UpdateAsync( long hospitalId, [FromForm] HospitalUpdateDto dto)
+    public async Task<IActionResult> UpdateAsync(long hospitalId, [FromForm] HospitalUpdateDto dto)
     {
         var validator = new HospitalUpdateValidator();
         var result = validator.Validate(dto);

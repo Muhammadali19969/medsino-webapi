@@ -24,7 +24,7 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
         {
             await _connection.CloseAsync();
         }
-        
+
     }
 
     public async Task<int> CreateAsync(Category entity)
@@ -56,7 +56,7 @@ public class CategoryRepository : BaseRepository, ICategoryRepository
             var result = await _connection.ExecuteAsync(query, new { Id = id });
             return result;
         }
-        catch 
+        catch
         {
 
             return 0;

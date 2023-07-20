@@ -1,8 +1,6 @@
 ﻿using MedSino.Service.Common.Helpers;
-using MedSino.Service.Interfaces.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using TechTalk.SpecFlow.Analytics.UserId;
 using IFileService = MedSino.Service.Interfaces.Common.IFileService;
 
 namespace MedSino.Service.Services.Common;

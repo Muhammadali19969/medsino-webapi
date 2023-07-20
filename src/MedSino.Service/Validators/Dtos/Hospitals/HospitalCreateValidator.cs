@@ -23,7 +23,7 @@ public class HospitalCreateValidator : AbstractValidator<HospitalCreateDto>
         RuleFor(dto => dto.Region).NotNull().NotEmpty().WithMessage("Region field is required!");
 
         RuleFor(dto => dto.District).NotNull().NotEmpty().WithMessage("District field is required!");
-            
+
 
         int maxImageSizeMB = 3;
         RuleFor(dto => dto.Image).NotEmpty().NotNull().WithMessage("Image field is required");

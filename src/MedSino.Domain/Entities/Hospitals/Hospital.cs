@@ -1,6 +1,4 @@
-﻿using System.Security.Principal;
-
-namespace MedSino.Domain.Entities.Hospitals;
+﻿namespace MedSino.Domain.Entities.Hospitals;
 
 public class Hospital : Auditable
 {

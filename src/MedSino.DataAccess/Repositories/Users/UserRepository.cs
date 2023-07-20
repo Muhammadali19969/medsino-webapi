@@ -17,7 +17,7 @@ public class UserRepository : BaseRepository, IUserRepository
             var result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
-        catch 
+        catch
         {
 
             return 0;
@@ -35,7 +35,7 @@ public class UserRepository : BaseRepository, IUserRepository
             await _connection.OpenAsync();
             string query = "INSERT INTO public.users( first_name, last_name, phone_num, image_path, password_hash, salt, created_at, updated_at, is_male, email) " +
                 "VALUES ( @FirstName, @LastName, @PhoneNumber, @ImagePath, @PasswordHash, @Salt, @CreatedAt, @UpdatedAt, @IsMail, @Email);";
-            var result = await _connection.ExecuteAsync(query,entity);
+            var result = await _connection.ExecuteAsync(query, entity);
             return result;
         }
         catch
@@ -66,7 +66,7 @@ public class UserRepository : BaseRepository, IUserRepository
             await _connection.CloseAsync();
         }
     }
-    public async Task<User?> GetByEmailAsync(string phone)
+    public async Task<User?> GetByPhoneAsync(string phone)
     {
         try
         {
@@ -107,5 +107,4 @@ public class UserRepository : BaseRepository, IUserRepository
     }
 }
 
-    
-    
+

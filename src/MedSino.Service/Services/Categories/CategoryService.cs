@@ -22,7 +22,7 @@ public class CategoryService : ICategoryService
     }
 
     public async Task<long> CountAsync() => await _repository.CountAsync();
-    
+
 
     public async Task<bool> CreateAsync(CategoryCreateDto dto)
     {
@@ -87,5 +87,5 @@ public class CategoryService : ICategoryService
         return dbResult > 0;
     }
 
-    
+
 }

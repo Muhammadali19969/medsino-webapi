@@ -6,12 +6,6 @@ namespace MedSino.Service.Validators;
 
 public class EmailValidator : AbstractValidator<RegisterDto>
 {
-    public EmailValidator()
-    {
-        RuleFor(dto => dto.Email).NotEmpty().NotNull().WithMessage("Email is required!")
-            .EmailAddress().WithMessage("Email is invalid!");
-    }
-
     public static bool IsValidEmail(string email)
     {
         const string validEmailPattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"

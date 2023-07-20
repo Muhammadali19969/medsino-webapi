@@ -1,15 +1,12 @@
 ﻿using MedSino.DataAccess.Interfaces.Hospitals;
 using MedSino.DataAccess.Utils;
-using MedSino.Domain.Entities.Categories;
 using MedSino.Domain.Entities.Hospitals;
-using MedSino.Domain.Exceptions.Categories;
 using MedSino.Domain.Exceptions.Files;
 using MedSino.Domain.Exceptions.Hospitals;
 using MedSino.Service.Common.Helpers;
 using MedSino.Service.Dtos.Hospitals;
 using MedSino.Service.Interfaces.Common;
 using MedSino.Service.Interfaces.Hospitals;
-using System.ComponentModel.Design;
 
 namespace MedSino.Service.Services.Hospitals;
 
@@ -18,7 +15,7 @@ public class HospitalService : IHospitalService
     private readonly IHospitalRepository _repository;
     private readonly IFileService _fileService;
 
-    public HospitalService(IHospitalRepository repository,IFileService fileservice)
+    public HospitalService(IHospitalRepository repository, IFileService fileservice)
     {
         this._repository = repository;
         this._fileService = fileservice;
@@ -27,7 +24,7 @@ public class HospitalService : IHospitalService
     {
         return await _repository.CountAsync();
     }
-    
+
 
     public async Task<bool> CreateAsync(HospitalCreateDto dto)
     {
@@ -80,7 +77,7 @@ public class HospitalService : IHospitalService
         hospital.PhoneNum1 = dto.PhoneNumber1;
         hospital.PhoneNum2 = dto.PhoneNumber2;
         hospital.Address = dto.Address;
-        hospital.Region= dto.Region;
+        hospital.Region = dto.Region;
         hospital.District = dto.District;
 
 

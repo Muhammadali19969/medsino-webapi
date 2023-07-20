@@ -2,7 +2,6 @@
 using Dapper;
 using MedSino.DataAccess.Interfaces.Hospitals;
 using MedSino.DataAccess.Utils;
-using MedSino.Domain.Entities.Categories;
 using MedSino.Domain.Entities.Hospitals;
 
 namespace MedSino.DataAccess.Repositories.Hospitals;
@@ -93,7 +92,7 @@ public class HospitalRepository : BaseRepository, IHospitalRepository
         {
             await _connection.OpenAsync();
             string query = "select * from hospitals where id = @Id";
-            var result = await _connection.QuerySingleAsync<Hospital>(query,new { Id = id });
+            var result = await _connection.QuerySingleAsync<Hospital>(query, new { Id = id });
             return result;
         }
         catch (Exception)
@@ -119,7 +118,7 @@ public class HospitalRepository : BaseRepository, IHospitalRepository
             var result = await _connection.ExecuteAsync(query, entity);
             return result;
         }
-        catch 
+        catch
         {
 
             return 0;

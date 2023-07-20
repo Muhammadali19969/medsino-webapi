@@ -9,10 +9,12 @@ using MedSino.Service.Interfaces.Auth;
 using MedSino.Service.Interfaces.Categories;
 using MedSino.Service.Interfaces.Common;
 using MedSino.Service.Interfaces.Hospitals;
+using MedSino.Service.Interfaces.Notification;
 using MedSino.Service.Services.Auth;
 using MedSino.Service.Services.Categories;
 using MedSino.Service.Services.Common;
 using MedSino.Service.Services.Hospitals;
+using MedSino.Service.Services.Notification;
 
 namespace MedSino.WebApi
 {
@@ -38,8 +40,9 @@ namespace MedSino.WebApi
 
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IHospitalService, HospitalService>();
-            builder.Services.AddScoped<IFileService,FileService>();
+            builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ISmsSender, SmsSender>();
             //->
 
             var app = builder.Build();

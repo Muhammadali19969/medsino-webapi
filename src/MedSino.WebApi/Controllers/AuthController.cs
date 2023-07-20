@@ -1,8 +1,8 @@
 ﻿using MedSino.Service.Dtos.Auth;
 using MedSino.Service.Interfaces.Auth;
+using MedSino.Service.Services.Auth;
 using MedSino.Service.Validators;
 using MedSino.Service.Validators.Dtos.Auth;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedSino.WebApi.Controllers
@@ -16,7 +16,7 @@ namespace MedSino.WebApi.Controllers
 
         public AuthController(IAuthService authService)
         {
-            this._authService=authService;
+            this._authService = authService;
         }
 
         [HttpPost("register")]
@@ -33,13 +33,20 @@ namespace MedSino.WebApi.Controllers
         }
 
         [HttpPost("register/send-code")]
-        public async Task<IActionResult> SendCodeRegisterAsync(string email)
+        public async Task<IActionResult> SendCodeRegisterAsync(string phone)
         {
-            var result = EmailValidator.IsValidEmail(email);
-            if (result == false) return BadRequest("Email is invalid!");
+            var result = PhoneNumberValidator.IsValid(phone);
+            if (result == false) return BadRequest("Phone number is invalid!");
 
-            var serviceResult = await _authService.SendCodeForRegisterAsync(email);
+            var serviceResult = await _authService.SendCodeForRegisterAsync(phone);
             return Ok(new { serviceResult.Result, serviceResult.CachedVerificationMinutes });
+        }
+
+        [HttpPost("register/verify")]
+        public async Task<IActionResult> VerifyRegisterAsync([FromBody] VerifyRegisterDto verifyRegisterDto)
+        {
+            var serviceResult = await _authService.VerifyRegisterAsync(verifyRegisterDto.PhoneNumber, verifyRegisterDto.Code);
+            return Ok(new { serviceResult.Result, serviceResult.Token });
         }
     }
 }
