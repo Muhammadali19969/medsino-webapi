@@ -7,7 +7,8 @@ public class Doctor : Human
     public int WorkExperience { get; set; }
     public string Region { get; set; } = string.Empty;
     public string District { get; set; } = string.Empty;
-    public TimeOnly StartWorkTime { get; set; }
-    public TimeOnly EndWorkTime { get; set; }
-    public TimeOnly LunchTime { get; set; }
+    public string Fees { get; set; } = string.Empty;
+    public string StartWorkTime { get; set; } = string.Empty;
+    public string EndWorkTime { get; set; } = string.Empty;
+    public string LunchTime { get; set; } = string.Empty;
 }

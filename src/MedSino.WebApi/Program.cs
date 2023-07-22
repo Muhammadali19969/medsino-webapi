@@ -1,18 +1,26 @@
 
+using MedSino.DataAccess.Interfaces.Bookings;
 using MedSino.DataAccess.Interfaces.Categories;
+using MedSino.DataAccess.Interfaces.Doctors;
 using MedSino.DataAccess.Interfaces.Hospitals;
 using MedSino.DataAccess.Interfaces.Users;
+using MedSino.DataAccess.Repositories.Bookings;
 using MedSino.DataAccess.Repositories.Categories;
+using MedSino.DataAccess.Repositories.Doctors;
 using MedSino.DataAccess.Repositories.Hospitals;
 using MedSino.DataAccess.Repositories.Users;
 using MedSino.Service.Interfaces.Auth;
+using MedSino.Service.Interfaces.Bookings;
 using MedSino.Service.Interfaces.Categories;
 using MedSino.Service.Interfaces.Common;
+using MedSino.Service.Interfaces.Doctors;
 using MedSino.Service.Interfaces.Hospitals;
 using MedSino.Service.Interfaces.Notification;
 using MedSino.Service.Services.Auth;
+using MedSino.Service.Services.Bookings;
 using MedSino.Service.Services.Categories;
 using MedSino.Service.Services.Common;
+using MedSino.Service.Services.Doctors;
 using MedSino.Service.Services.Hospitals;
 using MedSino.Service.Services.Notification;
 
@@ -37,12 +45,21 @@ namespace MedSino.WebApi
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IHospitalRepository, HospitalRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+            builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+
 
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IHospitalService, HospitalService>();
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IDoctorService, DoctorService>();
+
             builder.Services.AddScoped<ISmsSender, SmsSender>();
+
+
             //->
 
             var app = builder.Build();

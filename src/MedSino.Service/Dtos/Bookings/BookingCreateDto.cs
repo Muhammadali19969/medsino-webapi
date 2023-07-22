@@ -1,6 +1,7 @@
-﻿namespace MedSino.Domain.Entities.Bookings;
+﻿
+namespace MedSino.Service.Dtos.Bookings;
 
-public class Booking : Auditable
+public class BookingCreateDto
 {
     public long UserId { get; set; }
     public long DoctorId { get; set; }
