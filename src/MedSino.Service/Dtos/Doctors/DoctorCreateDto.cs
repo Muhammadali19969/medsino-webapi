@@ -1,11 +1,18 @@
-﻿using MedSino.Domain.Enums;
+﻿using Microsoft.AspNetCore.Http;
 
-namespace MedSino.Domain.Entities.Doctors;
+namespace MedSino.Service.Dtos.Doctors;
 
-public class Doctor : Human
+public class DoctorCreateDto
 {
     public long CategoryId { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string PhoneNumber { get; set; } = string.Empty;
+    public IFormFile? Image { get; set; }
+    public bool IsMale { get; set; }
+    public string Email { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
     public int WorkExperience { get; set; }
     public string Region { get; set; } = string.Empty;
     public string District { get; set; } = string.Empty;
@@ -13,6 +20,4 @@ public class Doctor : Human
     public string StartWorkTime { get; set; } = string.Empty;
     public string EndWorkTime { get; set; } = string.Empty;
     public string LunchTime { get; set; } = string.Empty;
-    public IdentityRole IdentityRole { get; set; }
-
 }

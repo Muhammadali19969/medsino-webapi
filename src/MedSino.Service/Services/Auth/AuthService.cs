@@ -47,7 +47,7 @@ public class AuthService : IAuthService
         if (_memoryCache.TryGetValue(REGISTER_CACHE_KEY + registerDto.PhoneNumber, out RegisterDto cachedRegisterDto))
         {
             cachedRegisterDto.FirstName = cachedRegisterDto.FirstName;
-            _memoryCache.Remove(registerDto.PhoneNumber);
+            _memoryCache.Remove(REGISTER_CACHE_KEY + registerDto.PhoneNumber);
         }
         else _memoryCache.Set(REGISTER_CACHE_KEY + registerDto.PhoneNumber, registerDto,
             TimeSpan.FromMinutes(CACHED_MINUTES_FOR_REGISTER));
@@ -56,7 +56,7 @@ public class AuthService : IAuthService
     }
 
     public async Task<(bool Result, int CachedVerificationMinutes)> SendCodeForRegisterAsync(string phone)
-    {
+    {  
         if (_memoryCache.TryGetValue(REGISTER_CACHE_KEY + phone, out RegisterDto registerDto))
         {
             VerificationDto verificationDto = new VerificationDto();
@@ -73,7 +73,6 @@ public class AuthService : IAuthService
 
             _memoryCache.Set(VERIFY_REGISTER_CACHE_KEY + phone, verificationDto,
                 TimeSpan.FromMinutes(CACHED_MINUTES_FOR_VERIFICATION));
-
 
             SmsMessage smsMessage = new SmsMessage();
             smsMessage.Title = "Med Sino";
@@ -101,7 +100,7 @@ public class AuthService : IAuthService
                     if (dbResult is true)
                     {
                         var user = await _userRepository.GetByPhoneAsync(phone);
-                        string token = await _tokenService.GenerateToken(user);
+                        string token = _tokenService.GenerateToken(user);
                         return (Result: true, Token: token);
                     }
                     else return (Result: false, Token: "");
@@ -132,7 +131,7 @@ public class AuthService : IAuthService
         user.Salt = hasherResult.Salt;
 
         user.CreatedAt = user.UpdatedAt  = TimeHelper.GetDateTime();
-        user.Role = Domain.Enums.IdentityRole.User;
+        user.IdentityRole = Domain.Enums.IdentityRole.User;
 
 
         var dbResult = await _userRepository.CreateAsync(user);
@@ -147,7 +146,7 @@ public class AuthService : IAuthService
         var hasherResult = PasswordHasher.Verify(loginDto.Password, user.PasswordHash, user.Salt);
         if (hasherResult == false) throw new PasswordNotMatchException();
 
-        string token = await _tokenService.GenerateToken(user);
+        string token = _tokenService.GenerateToken(user);
         return (Result: true, Token: token);
     }
 }

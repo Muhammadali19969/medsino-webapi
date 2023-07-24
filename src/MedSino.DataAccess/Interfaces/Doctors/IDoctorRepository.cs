@@ -4,8 +4,9 @@ using MedSino.Domain.Entities.Doctors;
 
 namespace MedSino.DataAccess.Interfaces.Doctors;
 
-public interface IDoctorRepository : IRepository<Doctor,DoctorsViewModel>,
+public interface IDoctorRepository : IRepository<Doctor,Doctor>,
     IGetAll<Doctor>
 { 
-    public Task<DoctorsViewModel?> GetByCategoryIdAsync(long categoryId);
+    public Task<long> CreateAsync1(Doctor doctor);
+    public Task<IList<DoctorsViewModel>?> GetByCategoryIdAsync(long categoryId);
 }

@@ -31,6 +31,7 @@ public class SmsSender : ISmsSender
         var content = new MultipartFormDataContent();
         content.Add(new StringContent(EMAIL), "email");
         content.Add(new StringContent(PASSWORD), "password");
+
         request.Content = content;
         var response = await client.SendAsync(request);
         if (response.IsSuccessStatusCode)

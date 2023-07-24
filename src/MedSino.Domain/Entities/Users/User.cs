@@ -4,5 +4,5 @@ namespace MedSino.Domain.Entities.Users;
 
 public sealed class User : Human
 {
-    public IdentityRole Role { get; set; }
+    public IdentityRole IdentityRole { get; set; }
 }

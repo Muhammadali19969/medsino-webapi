@@ -19,7 +19,7 @@ public class TokenService : ITokenService
     {
         _config = configuration.GetSection("Jwt");
     }
-    public async Task<string> GenerateToken(User user)
+    public string GenerateToken(User user)
     {
         var identityClaims = new Claim[]
         {
@@ -27,7 +27,7 @@ public class TokenService : ITokenService
             new Claim("FirstName", user.FirstName),
             new Claim("Lastname", user.LastName),
             new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
-            new Claim(ClaimTypes.Role, user.Role.ToString())
+            new Claim(ClaimTypes.Role, user.IdentityRole.ToString())
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["SecurityKey"]!));
