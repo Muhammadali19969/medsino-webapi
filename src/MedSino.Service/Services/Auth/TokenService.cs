@@ -1,4 +1,5 @@
 ﻿using Gherkin;
+using MedSino.Domain.Entities.Doctors;
 using MedSino.Domain.Entities.Users;
 using MedSino.Service.Common.Helpers;
 using MedSino.Service.Interfaces.Auth;
@@ -28,6 +29,33 @@ public class TokenService : ITokenService
             new Claim("Lastname", user.LastName),
             new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
             new Claim(ClaimTypes.Role, user.IdentityRole.ToString())
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["SecurityKey"]!));
+        var keyCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        int expiresHours = int.Parse(_config["Lifetime"]!);
+        var token = new JwtSecurityToken(
+            issuer: _config["Issuer"],
+            audience: _config["Audience"],
+            claims: identityClaims,
+            expires: TimeHelper.GetDateTime().AddHours(expiresHours),
+            signingCredentials: keyCredentials);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+
+    //->Doctor get token
+    public string GenerateDoctorToken(Doctor doctor)
+    {
+        var identityClaims = new Claim[]
+        {
+            new Claim("Id", doctor.Id.ToString()),
+            new Claim("FirstName", doctor.FirstName),
+            new Claim("Lastname", doctor.LastName),
+            new Claim(ClaimTypes.MobilePhone, doctor.PhoneNumber),
+            new Claim(ClaimTypes.Role, doctor.IdentityRole.ToString())
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["SecurityKey"]!));

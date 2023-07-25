@@ -1,5 +1,6 @@
 ﻿using MedSino.Service.Dtos.Bookings;
 using MedSino.Service.Interfaces.Bookings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedSino.WebApi.Controllers;
@@ -22,5 +23,10 @@ public class BookingController : ControllerBase
     [HttpGet("{doctorId}/{bookingDate}")]
     public async Task<IActionResult> GetByIdDateAsync(long doctorId, string bookingDate)
         => Ok(await _bookingService.GetByIdDateAsync(doctorId, bookingDate));
+
+    [HttpGet("{doctorId}/{time}/{date}")]
+    /*[Authorize(Roles = "Doctor")]*/
+    public async Task<IActionResult> GetUserViewByDoctorIdDateTime(long doctorId, string time, string date)
+        => Ok( await _bookingService.GetUserViewByDoctorIdDateTime(doctorId,time,date));
 
 }

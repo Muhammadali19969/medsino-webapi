@@ -5,14 +5,18 @@ using MedSino.DataAccess.ViewModels.Doctors;
 using MedSino.Domain.Entities.Categories;
 using MedSino.Domain.Entities.Doctors;
 using MedSino.Domain.Entities.Raitings;
+using MedSino.Domain.Exceptions.Auth;
 using MedSino.Domain.Exceptions.Categories;
 using MedSino.Domain.Exceptions.Doctors;
 using MedSino.Domain.Exceptions.Files;
+using MedSino.Domain.Exceptions.Users;
 using MedSino.Service.Common.Helpers;
 using MedSino.Service.Common.Security;
 using MedSino.Service.Dtos.Doctors;
+using MedSino.Service.Interfaces.Auth;
 using MedSino.Service.Interfaces.Common;
 using MedSino.Service.Interfaces.Doctors;
+using MedSino.Service.Services.Auth;
 
 namespace MedSino.Service.Services.Doctors;
 
@@ -20,15 +24,18 @@ public class DoctorService : IDoctorService
 {
     private readonly IDoctorRepository _doctorRepository;
     private readonly IRaitingRepository _raitingRepository;
+    private readonly ITokenService _tokenService;
     private readonly IFileService _fileService;
 
     public DoctorService(IDoctorRepository doctorRepository,
         IFileService fileService,
-        IRaitingRepository raitingRepository)
+        IRaitingRepository raitingRepository,
+        ITokenService tokenService)
     {
         this._fileService= fileService;
         this._doctorRepository = doctorRepository;
         this._raitingRepository = raitingRepository;
+        this._tokenService = tokenService;
     }
 
     public async Task<bool> CreateAsync(DoctorCreateDto dto)
@@ -60,19 +67,10 @@ public class DoctorService : IDoctorService
         doctor.EndWorkTime = dto.EndWorkTime;
         doctor.LunchTime = dto.LunchTime;
         doctor.IdentityRole = Domain.Enums.IdentityRole.Doctor;
+        doctor.CreatedAt = doctor.UpdatedAt = TimeHelper.GetDateTime();
 
         var result = await _doctorRepository.CreateAsync(doctor);
-        if (result > 0)
-        {
-            var raiting = new Raiting();
-            raiting.StarCount = 0;
-            raiting.DoctorId = result;
-            raiting.UserId = 0;
-            raiting.CreatedAt = raiting.UpdatedAt = TimeHelper.GetDateTime();
-            var res = await _raitingRepository.CreateAsync(raiting);
-            return true;
-        }
-        return false;
+        return result>0;
         
     }
 
@@ -80,6 +78,24 @@ public class DoctorService : IDoctorService
     {
         var data = await _doctorRepository.GetByCategoryIdAsync(categoryId);
         if (data == null) throw new DoctorNotFoundException();
+        return data;
+    }
+
+    public async Task<(bool Result, string Token)> LoginAsync(DoctorLoginDto loginDto)
+    {
+        var doctor = await _doctorRepository.GetByPhoneAsync(loginDto.PhoneNumber);
+        if (doctor is null) throw new DoctorNotFoundException();
+
+        var hasherResult = PasswordHasher.Verify(loginDto.Password, doctor.PasswordHash, doctor.Salt);
+        if (hasherResult == false) throw new PasswordNotMatchException();
+
+        string token = _tokenService.GenerateDoctorToken(doctor);
+        return (Result: true, Token: token);
+    }
+
+    public async Task<IList<DoctorsViewModel>?> SearchAsync(string search)
+    {
+        var data = await _doctorRepository.SearchAsync(search);
         return data;
     }
 

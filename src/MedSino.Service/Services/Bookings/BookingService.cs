@@ -1,5 +1,7 @@
 ﻿using MedSino.DataAccess.Interfaces.Bookings;
+using MedSino.DataAccess.ViewModels.Users;
 using MedSino.Domain.Entities.Bookings;
+using MedSino.Domain.Exceptions.Bookings;
 using MedSino.Service.Common.Helpers;
 using MedSino.Service.Dtos.Bookings;
 using MedSino.Service.Interfaces.Bookings;
@@ -32,6 +34,13 @@ public class BookingService : IBookingService
     public async Task<IList<Booking>> GetByIdDateAsync(long doctorId, string bookinDate)
     {
         var data = await _bookingRepository.GetByIdDateAsync(doctorId, bookinDate);
+        return data;
+    }
+
+    public async Task<UserViewModel?> GetUserViewByDoctorIdDateTime(long doctorId, string time, string date)
+    {
+        var data = await _bookingRepository.GetUserViewByDoctorIdDateTimeAsync(doctorId, time, date);
+        if (data == null) throw new BookingNotFoundException();
         return data;
     }
 }

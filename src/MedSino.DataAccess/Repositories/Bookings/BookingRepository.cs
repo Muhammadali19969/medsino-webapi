@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using MedSino.DataAccess.Interfaces.Bookings;
+using MedSino.DataAccess.ViewModels.Users;
 using MedSino.Domain.Entities.Bookings;
 using MedSino.Domain.Entities.Categories;
+using MedSino.Domain.Entities.Doctors;
 using static Dapper.SqlMapper;
 
 namespace MedSino.DataAccess.Repositories.Bookings;
@@ -44,6 +46,27 @@ public class BookingRepository : BaseRepository, IBookingRepository
         {
 
             return new List<Booking>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
+    }
+
+    public async Task<UserViewModel?> GetUserViewByDoctorIdDateTimeAsync(long doctoId, string time, string date)
+    {
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"select * from user_view where doctor_id = {doctoId} and booking_date = '{date}' and start_time = '{time}' ;";
+            var result = await _connection.QuerySingleAsync<UserViewModel>(query);
+
+            return result;
+        }
+        catch
+        {
+
+            return null;
         }
         finally
         {

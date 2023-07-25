@@ -1,5 +1,7 @@
-﻿using MedSino.Service.Dtos.Doctors;
+﻿using FluentValidation;
+using MedSino.Service.Dtos.Doctors;
 using MedSino.Service.Interfaces.Doctors;
+using MedSino.Service.Validators.Dtos.Auth;
 using MedSino.Service.Validators.Dtos.Doctors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -38,12 +40,30 @@ namespace MedSino.WebApi.Controllers
         }
 
         [HttpPost]
+        
+
         public async Task<IActionResult> CreateAsync([FromForm] DoctorCreateDto dto)
         {
             var createValidator = new DoctorCreateValidator();
             var validatorResult = createValidator.Validate(dto);
             if (validatorResult.IsValid) return Ok(await _doctorService.CreateAsync(dto));
             else return BadRequest(validatorResult.Errors);
+        }
+
+        [HttpGet("search")]
+        [Authorize(Roles = "Doctor")]
+        public async Task<IActionResult> SearchAsync([FromQuery] string search)
+            =>Ok(await _doctorService.SearchAsync(search));
+
+        [HttpPost("doctorLogin")]
+        public async Task<IActionResult> LoginAsync(DoctorLoginDto loginDto)
+        {
+            var validator = new DoctorLoginValidator();
+            var valResult = validator.Validate(loginDto);
+            if (valResult.IsValid == false) return BadRequest(valResult.Errors);
+
+            var serviceResult = await _doctorService.LoginAsync(loginDto);
+            return Ok(new { serviceResult.Result, serviceResult.Token });
         }
 
 

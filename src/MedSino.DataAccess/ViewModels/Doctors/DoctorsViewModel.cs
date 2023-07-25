@@ -20,7 +20,7 @@ public class DoctorsViewModel
     public string LunchTime { get; set; } = string.Empty;
     public bool IsMale { get; set; }
     public float Fees { get; set; }
-    public float Star { get; set; }
+    public float? Star { get; set; }
 
 
 }

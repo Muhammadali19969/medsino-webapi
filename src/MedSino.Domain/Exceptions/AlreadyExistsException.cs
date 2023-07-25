@@ -2,9 +2,9 @@
 
 namespace MedSino.Domain.Exceptions;
 
-public class AlreadyExistsException : Exception
+public class AlreadyExistsException : ClientException
 {
-    public HttpStatusCode StatusCode { get; } = HttpStatusCode.Conflict;
+    public override HttpStatusCode StatusCode { get; } = HttpStatusCode.Conflict;
 
-    public string TitleMessage { get; protected set; } = String.Empty;
+    public override string TitleMessage { get; protected set; } = String.Empty;
 }
