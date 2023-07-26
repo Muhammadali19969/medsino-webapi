@@ -39,5 +39,9 @@ namespace MedSino.WebApi.Controllers
         public async Task<IActionResult> GetByIdAsync(long userId)
             => Ok( await _userService.GetByIdAsync(userId));
 
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync(long userId)
+            => Ok(await _userService.DeleteAsync(userId));
+
     }
 }

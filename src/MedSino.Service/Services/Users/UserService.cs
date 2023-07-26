@@ -28,6 +28,12 @@ public class UserService : IUserService
         this._paginator = paginator;
     }
 
+    public async Task<bool> DeleteAsync(long userId)
+    {
+        var result = await _userRepository.DeleteAsync(userId);
+        return result > 0;
+    }
+
     public async Task<IList<User>> GetAllAsync(PaginationParams @params)
     {
         var users = await _userRepository.GetAllAsync(@params);

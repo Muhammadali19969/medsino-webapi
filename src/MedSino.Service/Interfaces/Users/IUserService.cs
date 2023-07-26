@@ -10,4 +10,6 @@ public interface IUserService
     public Task<IList<User>> GetAllAsync(PaginationParams @params);
 
     public Task<User> GetByIdAsync(long userId);
+
+    public Task<bool> DeleteAsync(long userId);
 }

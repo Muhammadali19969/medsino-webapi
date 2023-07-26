@@ -2,8 +2,6 @@
 using MedSino.DataAccess.Interfaces.Users;
 using MedSino.DataAccess.Utils;
 using MedSino.DataAccess.ViewModels.Users;
-using MedSino.Domain.Entities.Categories;
-using MedSino.Domain.Entities.Doctors;
 using MedSino.Domain.Entities.Users;
 
 namespace MedSino.DataAccess.Repositories.Users;
@@ -21,7 +19,6 @@ public class UserRepository : BaseRepository, IUserRepository
         }
         catch
         {
-
             return 0;
         }
         finally
@@ -56,7 +53,8 @@ public class UserRepository : BaseRepository, IUserRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"delete from users where id = {id}";
+            string query = $"update users set is_delete=true " +
+                $" where id = {id}";
             return await _connection.ExecuteAsync(query);
         }
         catch
