@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MedSino.DataAccess.Utils;
 using MedSino.Service.Dtos.Doctors;
 using MedSino.Service.Interfaces.Doctors;
 using MedSino.Service.Validators.Dtos.Auth;
@@ -10,20 +11,21 @@ using Microsoft.AspNetCore.Mvc;
 namespace MedSino.WebApi.Controllers
 {
 
-    [Route("api/doctor")]
+    [Route("api/doctors")]
     [ApiController]
     public class DoctorController : ControllerBase
     {
 
 
         private readonly IDoctorService _doctorService;
+        private readonly int maxPageSize = 30;
 
         public DoctorController(IDoctorService doctorService)
         {
             this._doctorService = doctorService;
         }
 
-        [HttpGet("{categoryId}")]
+        [HttpGet("star/{categoryId}")]
         //[Authorize(Roles = "Doctor")]
 
         public async Task<IActionResult> GetByCategoryIdAsync(long categoryId)
@@ -40,8 +42,6 @@ namespace MedSino.WebApi.Controllers
         }
 
         [HttpPost]
-        
-
         public async Task<IActionResult> CreateAsync([FromForm] DoctorCreateDto dto)
         {
             var createValidator = new DoctorCreateValidator();
@@ -66,7 +66,16 @@ namespace MedSino.WebApi.Controllers
             return Ok(new { serviceResult.Result, serviceResult.Token });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
+            => Ok( await _doctorService.GetAllAsync(new PaginationParams(page, maxPageSize)));
 
-        
+        [HttpGet("{doctorId}")]
+        public async Task<IActionResult> GetByIdAsync(long doctorId)
+            => Ok(await _doctorService.GetByIdAsync(doctorId));
+
+
+
+
     }
 }

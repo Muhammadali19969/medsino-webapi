@@ -2,17 +2,30 @@
 using MedSino.DataAccess.Interfaces.Doctors;
 using MedSino.DataAccess.Utils;
 using MedSino.DataAccess.ViewModels.Doctors;
-using MedSino.Domain.Entities.Categories;
 using MedSino.Domain.Entities.Doctors;
-using MedSino.Domain.Entities.Users;
 
 namespace MedSino.DataAccess.Repositories.Doctors;
 
 public class DoctorRepository : BaseRepository, IDoctorRepository
 {
-    public Task<long> CountAsync()
+    public async Task<long> CountAsync()
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "select count(*) from doctors ";
+            var result = await _connection.QuerySingleAsync<long>(query);
+            return result;
+        }
+        catch
+        {
+
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public async Task<int> CreateAsync(Doctor entity)
@@ -43,9 +56,27 @@ public class DoctorRepository : BaseRepository, IDoctorRepository
         throw new NotImplementedException();
     }
 
-    public Task<IList<Doctor>> GetAllAsync(PaginationParams @params)
+    public async Task<IList<Doctor>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "select * from doctors order by id desc " +
+                $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+
+            var result = (await _connection.QueryAsync<Doctor>(query)).ToList();
+            return result;
+
+        }
+        catch (Exception)
+        {
+
+            return new List<Doctor>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public async Task<IList<DoctorsViewModel>?> GetByCategoryIdAsync(long categoryId)

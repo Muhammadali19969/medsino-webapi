@@ -2,6 +2,7 @@
 using MedSino.DataAccess.Interfaces.Users;
 using MedSino.DataAccess.Utils;
 using MedSino.DataAccess.ViewModels.Users;
+using MedSino.Domain.Entities.Categories;
 using MedSino.Domain.Entities.Doctors;
 using MedSino.Domain.Entities.Users;
 
@@ -86,9 +87,27 @@ public class UserRepository : BaseRepository, IUserRepository
         }
     }
 
-    public Task<IList<UserViewModel>> GetAllAsync(PaginationParams @params)
+    public async Task<IList<User>> GetAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "select * from users order by id desc " +
+                $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+
+            var result = (await _connection.QueryAsync<User>(query)).ToList();
+            return result;
+
+        }
+        catch (Exception)
+        {
+
+            return new List<User>();
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
 

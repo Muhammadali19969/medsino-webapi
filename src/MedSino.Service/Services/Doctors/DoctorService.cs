@@ -1,10 +1,12 @@
 ﻿using MedSino.DataAccess.Interfaces;
 using MedSino.DataAccess.Interfaces.Doctors;
 using MedSino.DataAccess.Interfaces.Raitings;
+using MedSino.DataAccess.Utils;
 using MedSino.DataAccess.ViewModels.Doctors;
 using MedSino.Domain.Entities.Categories;
 using MedSino.Domain.Entities.Doctors;
 using MedSino.Domain.Entities.Raitings;
+using MedSino.Domain.Entities.Users;
 using MedSino.Domain.Exceptions.Auth;
 using MedSino.Domain.Exceptions.Categories;
 using MedSino.Domain.Exceptions.Doctors;
@@ -17,6 +19,7 @@ using MedSino.Service.Interfaces.Auth;
 using MedSino.Service.Interfaces.Common;
 using MedSino.Service.Interfaces.Doctors;
 using MedSino.Service.Services.Auth;
+using MedSino.Service.Services.Common;
 
 namespace MedSino.Service.Services.Doctors;
 
@@ -25,17 +28,20 @@ public class DoctorService : IDoctorService
     private readonly IDoctorRepository _doctorRepository;
     private readonly IRaitingRepository _raitingRepository;
     private readonly ITokenService _tokenService;
+    private readonly IPaginator _paginator;
     private readonly IFileService _fileService;
 
     public DoctorService(IDoctorRepository doctorRepository,
         IFileService fileService,
         IRaitingRepository raitingRepository,
-        ITokenService tokenService)
+        ITokenService tokenService,
+        IPaginator paginator)
     {
         this._fileService= fileService;
         this._doctorRepository = doctorRepository;
         this._raitingRepository = raitingRepository;
         this._tokenService = tokenService;
+        this._paginator = paginator;
     }
 
     public async Task<bool> CreateAsync(DoctorCreateDto dto)
@@ -74,11 +80,27 @@ public class DoctorService : IDoctorService
         
     }
 
+    public async Task<IList<Doctor>> GetAllAsync(PaginationParams @params)
+    {
+        var doctors = await _doctorRepository.GetAllAsync(@params);
+        var count = await _doctorRepository.CountAsync();
+        _paginator.Paginate(count, @params);
+
+        return doctors;
+    }
+
     public async Task<IList<DoctorsViewModel>?> GetByCategoryIdAsync(long categoryId)
     {
         var data = await _doctorRepository.GetByCategoryIdAsync(categoryId);
         if (data == null) throw new DoctorNotFoundException();
         return data;
+    }
+
+    public async Task<Doctor> GetByIdAsync(long doctorId)
+    {
+        var doctor = await _doctorRepository.GetByIdAsync(doctorId);
+        if(doctor == null) throw new DoctorNotFoundException();
+        return doctor;
     }
 
     public async Task<(bool Result, string Token)> LoginAsync(DoctorLoginDto loginDto)

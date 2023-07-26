@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
-namespace MedSino.Service.Validators.Dtos.Raitings
+namespace MedSino.Service.Validators.Dtos.Raitings;
+
+public class RaitingValidatorDto 
 {
-    internal class RaitingValidatorDto
+    public RaitingValidatorDto()
     {
+        
     }
 }
