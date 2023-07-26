@@ -2,6 +2,7 @@
 using MedSino.DataAccess.Interfaces.Users;
 using MedSino.DataAccess.Utils;
 using MedSino.DataAccess.ViewModels.Users;
+using MedSino.Domain.Entities.Doctors;
 using MedSino.Domain.Entities.Users;
 
 namespace MedSino.DataAccess.Repositories.Users;
@@ -33,7 +34,7 @@ public class UserRepository : BaseRepository, IUserRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "INSERT INTO public.users( first_name, last_name, phone_num, image_path, password_hash, salt, created_at, updated_at, is_male, email, identity_role) " +
+            string query = "INSERT INTO public.users( first_name, last_name, phone_number, image_path, password_hash, salt, created_at, updated_at, is_male, email, identity_role) " +
                 "VALUES ( @FirstName, @LastName, @PhoneNumber, @ImagePath, @PasswordHash, @Salt, @CreatedAt, @UpdatedAt, @IsMale, @Email, @IdentityRole);";
             var result = await _connection.ExecuteAsync(query, entity);
             return result;
@@ -71,7 +72,7 @@ public class UserRepository : BaseRepository, IUserRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "SELECT * FROM users where phone_num = @PhoneNumber";
+            string query = "SELECT * FROM users where phone_number = @PhoneNumber";
             var user = await _connection.QuerySingleAsync<User>(query, new { PhoneNumber = phone });
             return user;
         }
@@ -91,9 +92,23 @@ public class UserRepository : BaseRepository, IUserRepository
     }
 
 
-    public Task<UserViewModel?> GetByIdAsync(long id)
+    public async Task<User?> GetByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"SELECT * FROM users where id=@Id";
+            var result = await _connection.QuerySingleAsync<User>(query, new { Id = id });
+            return result;
+        }
+        catch
+        {
+            return null;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public Task<(int ItemsCount, IList<UserViewModel>)> SearchAsync(string search, PaginationParams @params)
@@ -101,9 +116,28 @@ public class UserRepository : BaseRepository, IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task<int> UpdateAsync(long id, User entity)
+    public async Task<int> UpdateAsync(long id, User entity)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = "UPDATE public.users SET first_name = @FirstName, last_name = @LastName, phone_number = @PhoneNumber, image_path = @ImagePath, " +
+                " created_at = @CreatedAt, updated_at = @UpdatedAt, is_male = @IsMale, email = @Email " +
+                $"WHERE id = {id}";
+            var result = await _connection.ExecuteAsync(query, entity);
+            return result;
+
+
+        }
+        catch (Exception)
+        {
+
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 }
 

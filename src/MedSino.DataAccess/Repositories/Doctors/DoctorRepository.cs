@@ -20,7 +20,7 @@ public class DoctorRepository : BaseRepository, IDoctorRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "INSERT INTO public.doctors( category_id, first_name, last_name, address, phone_num, email, image_path, work_experience, region, district, start_work_time, end_work_time, lunch_time, password_hash, salt, created_at, updated_at, is_male, fees, identity_role) " +
+            string query = "INSERT INTO public.doctors( category_id, first_name, last_name, address, phone_number, email, image_path, work_experience, region, district, start_work_time, end_work_time, lunch_time, password_hash, salt, created_at, updated_at, is_male, fees, identity_role) " +
                 "VALUES ( @CategoryId, @FirstName, @LastName, @Address, @PhoneNumber, @Email, @ImagePath, @WorkExperience, @Region, @District, @StartWorkTime, @EndWorkTime, @LunchTime, @PasswordHash, @Salt, @CreatedAt, @UpdatedAt, @IsMale, @Fees, @IdentityRole) ";
 
             var result = await _connection.ExecuteAsync(query, entity);
@@ -92,7 +92,7 @@ public class DoctorRepository : BaseRepository, IDoctorRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "SELECT * FROM doctors where phone_num = @PhoneNumber";
+            string query = "SELECT * FROM doctors where phone_number = @PhoneNumber";
             var doctor = await _connection.QuerySingleAsync<Doctor>(query, new { PhoneNumber = phone });
             return doctor;
         }
@@ -139,7 +139,7 @@ public class DoctorRepository : BaseRepository, IDoctorRepository
         {
             await _connection.OpenAsync();
             string query = "UPDATE public.doctors " +
-                "SET first_name=@FirstName, last_name=@LastName, address=@Address, phone_num=@PhoneNumber, email=@Email, image_path=@ImagePath," +
+                "SET first_name=@FirstName, last_name=@LastName, address=@Address, phone_number = @PhoneNumber, email=@Email, image_path=@ImagePath," +
                 " work_experience=@WorkExperience, region=@Region, district=@District, start_work_time=@StartWorkTime, end_work_time=@EndWorkTime," +
                 " lunch_time=@LunchTime, created_at=@CreatedAt, updated_at=@UpdatedAt, is_male=@IsMail, fees=@Fees " +
                 $"WHERE id = {id}";

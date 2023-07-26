@@ -28,7 +28,9 @@ create table doctors
 	created_at timestamp without time zone default now(),
 	updated_at timestamp without time zone default now(),
 	is_male bool default false,
-	fees real not null
+	fees real not null,
+	identity_role text not null
+
 	
 );
 

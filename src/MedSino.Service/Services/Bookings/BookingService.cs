@@ -15,7 +15,7 @@ public class BookingService : IBookingService
     public BookingService(IBookingRepository bookingRepository)
     {
         this._bookingRepository = bookingRepository;
-        
+
     }
 
     public async Task<bool> CreateAsync(BookingCreateDto dto)

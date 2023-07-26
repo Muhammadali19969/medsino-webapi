@@ -6,6 +6,7 @@ using MedSino.Service.Interfaces.Doctors;
 using MedSino.Service.Interfaces.Hospitals;
 using MedSino.Service.Interfaces.Notification;
 using MedSino.Service.Interfaces.Raitings;
+using MedSino.Service.Interfaces.Users;
 using MedSino.Service.Services.Auth;
 using MedSino.Service.Services.Bookings;
 using MedSino.Service.Services.Categories;
@@ -14,6 +15,7 @@ using MedSino.Service.Services.Doctors;
 using MedSino.Service.Services.Hospitals;
 using MedSino.Service.Services.Notification;
 using MedSino.Service.Services.Raitings;
+using MedSino.Service.Services.Users;
 
 namespace MedSino.WebApi.Configurations.Layers;
 
@@ -29,6 +31,7 @@ public static class ServiceLayerConfiguration
         builder.Services.AddScoped<ITokenService, TokenService>();
         builder.Services.AddScoped<IDoctorService, DoctorService>();
         builder.Services.AddScoped<IRaitingService, RaitingService>();
+        builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<ISmsSender, SmsSender>();
     }
 }
