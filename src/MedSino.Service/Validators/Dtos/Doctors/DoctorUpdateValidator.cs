@@ -17,7 +17,8 @@ public class DoctorUpdateValidator : AbstractValidator<DoctorUpdateDto>
             .MaximumLength(50).WithMessage("LastName must be less than 50 characters");
 
         RuleFor(dto => dto.PhoneNumber).NotNull().NotEmpty().WithMessage("Phone number field is required!")
-            .Must(phone => PhoneNumberValidator.IsValid(phone)).WithMessage("Phone number is incorrect!");
+        .Must(phone => PhoneNumberValidator.IsValid(phone)).WithMessage("Phone number is incorrect!");
+
 
         When(dto => dto.Image is not null, () =>
         {

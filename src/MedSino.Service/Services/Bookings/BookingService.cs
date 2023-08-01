@@ -4,6 +4,7 @@ using MedSino.Domain.Entities.Bookings;
 using MedSino.Domain.Exceptions.Bookings;
 using MedSino.Service.Common.Helpers;
 using MedSino.Service.Dtos.Bookings;
+using MedSino.Service.Interfaces.Auth;
 using MedSino.Service.Interfaces.Bookings;
 
 namespace MedSino.Service.Services.Bookings;
@@ -11,17 +12,20 @@ namespace MedSino.Service.Services.Bookings;
 public class BookingService : IBookingService
 {
     private readonly IBookingRepository _bookingRepository;
+    private readonly IIdentityService _identityService;
 
-    public BookingService(IBookingRepository bookingRepository)
+    public BookingService(IBookingRepository bookingRepository,
+        IIdentityService identityService)
     {
         this._bookingRepository = bookingRepository;
+        this._identityService = identityService;
 
     }
 
     public async Task<bool> CreateAsync(BookingCreateDto dto)
     {
         var booking = new Booking();
-        booking.UserId = dto.UserId;
+        booking.UserId = _identityService.UserId;
         booking.DoctorId = dto.DoctorId;
         booking.StartTime = dto.StartTime;
         booking.EndTime = dto.EndTime;

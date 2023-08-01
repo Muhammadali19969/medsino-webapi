@@ -33,6 +33,7 @@ public static class ServiceLayerConfiguration
         builder.Services.AddScoped<IRaitingService, RaitingService>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IPaginator, Paginator>();
+        builder.Services.AddScoped<IIdentityService, IdentityService>();
         builder.Services.AddSingleton<ISmsSender, SmsSender>();
     }
 }

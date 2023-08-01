@@ -17,16 +17,18 @@ public class BookingController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "User,Admin")]
     public async Task<IActionResult> CreateAsync([FromForm] BookingCreateDto dto)
-        =>Ok(await _bookingService.CreateAsync(dto));
+        => Ok(await _bookingService.CreateAsync(dto));
 
     [HttpGet("{doctorId}/{bookingDate}")]
+    [Authorize(Roles = "Doctor,User")]
     public async Task<IActionResult> GetByIdDateAsync(long doctorId, string bookingDate)
         => Ok(await _bookingService.GetByIdDateAsync(doctorId, bookingDate));
 
     [HttpGet("{doctorId}/{time}/{date}")]
-    /*[Authorize(Roles = "Doctor")]*/
+    [Authorize(Roles = "Doctor,Admin")]
     public async Task<IActionResult> GetUserViewByDoctorIdDateTime(long doctorId, string time, string date)
-        => Ok( await _bookingService.GetUserViewByDoctorIdDateTime(doctorId,time,date));
+        => Ok(await _bookingService.GetUserViewByDoctorIdDateTime(doctorId, time, date));
 
 }

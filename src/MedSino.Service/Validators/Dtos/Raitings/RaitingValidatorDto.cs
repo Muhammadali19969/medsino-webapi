@@ -1,11 +1,9 @@
-﻿using FluentValidation;
+﻿namespace MedSino.Service.Validators.Dtos.Raitings;
 
-namespace MedSino.Service.Validators.Dtos.Raitings;
-
-public class RaitingValidatorDto 
+public class RaitingValidatorDto
 {
     public RaitingValidatorDto()
     {
-        
+
     }
 }

@@ -1,16 +1,12 @@
-﻿using MedSino.DataAccess.Interfaces;
-using MedSino.DataAccess.Interfaces.Doctors;
+﻿using MedSino.DataAccess.Interfaces.Doctors;
 using MedSino.DataAccess.Interfaces.Raitings;
 using MedSino.DataAccess.Utils;
 using MedSino.DataAccess.ViewModels.Doctors;
-using MedSino.Domain.Entities.Categories;
 using MedSino.Domain.Entities.Doctors;
-using MedSino.Domain.Entities.Raitings;
 using MedSino.Domain.Entities.Users;
 using MedSino.Domain.Exceptions.Auth;
 using MedSino.Domain.Exceptions.Categories;
 using MedSino.Domain.Exceptions.Doctors;
-using MedSino.Domain.Exceptions.Files;
 using MedSino.Domain.Exceptions.Users;
 using MedSino.Service.Common.Helpers;
 using MedSino.Service.Common.Security;
@@ -18,8 +14,6 @@ using MedSino.Service.Dtos.Doctors;
 using MedSino.Service.Interfaces.Auth;
 using MedSino.Service.Interfaces.Common;
 using MedSino.Service.Interfaces.Doctors;
-using MedSino.Service.Services.Auth;
-using MedSino.Service.Services.Common;
 
 namespace MedSino.Service.Services.Doctors;
 
@@ -29,19 +23,22 @@ public class DoctorService : IDoctorService
     private readonly IRaitingRepository _raitingRepository;
     private readonly ITokenService _tokenService;
     private readonly IPaginator _paginator;
+    private readonly IIdentityService _identity;
     private readonly IFileService _fileService;
 
     public DoctorService(IDoctorRepository doctorRepository,
         IFileService fileService,
         IRaitingRepository raitingRepository,
         ITokenService tokenService,
-        IPaginator paginator)
+        IPaginator paginator,
+        IIdentityService identityService)
     {
-        this._fileService= fileService;
+        this._fileService = fileService;
         this._doctorRepository = doctorRepository;
         this._raitingRepository = raitingRepository;
         this._tokenService = tokenService;
         this._paginator = paginator;
+        this._identity = identityService;
     }
 
     public async Task<bool> CreateAsync(DoctorCreateDto dto)
@@ -52,8 +49,8 @@ public class DoctorService : IDoctorService
         doctor.LastName = dto.LastName;
         doctor.Email = dto.Email;
         doctor.PhoneNumber = dto.PhoneNumber;
-        
-        if(dto.Image is not null)
+
+        if (dto.Image is not null)
         {
             string newImagePath = await _fileService.UploadImageAsync(dto.Image);
             doctor.ImagePath = newImagePath;
@@ -76,8 +73,20 @@ public class DoctorService : IDoctorService
         doctor.CreatedAt = doctor.UpdatedAt = TimeHelper.GetDateTime();
 
         var result = await _doctorRepository.CreateAsync(doctor);
-        return result>0;
-        
+        return result > 0;
+
+    }
+
+    public async Task<bool> DeleteAsync(long doctorId)
+    {
+        //if (doctorId != _identity.UserId && _identity.IdentityRole != Domain.Enums.IdentityRole.Admin) throw new DoctorNotFoundException();
+        var doctor = await _doctorRepository.GetByIdAsync(doctorId);
+        if (doctor is null) throw new DoctorNotFoundException();
+
+        var result = await _fileService.DeleteImageAsync(doctor.ImagePath);
+        var dbResult = await _doctorRepository.DeleteAsync(doctorId);
+        return dbResult > 0;
+
     }
 
     public async Task<IList<Doctor>> GetAllAsync(PaginationParams @params)
@@ -99,7 +108,7 @@ public class DoctorService : IDoctorService
     public async Task<Doctor> GetByIdAsync(long doctorId)
     {
         var doctor = await _doctorRepository.GetByIdAsync(doctorId);
-        if(doctor == null) throw new DoctorNotFoundException();
+        if (doctor == null) throw new DoctorNotFoundException();
         return doctor;
     }
 
@@ -123,8 +132,9 @@ public class DoctorService : IDoctorService
 
     public async Task<bool> UpdateAsync(long doctorId, DoctorUpdateDto dto)
     {
+        //if (doctorId != _identity.UserId && _identity.IdentityRole != Domain.Enums.IdentityRole.Admin) throw new DoctorNotFoundException();
         var doctor = await _doctorRepository.GetByIdAsync(doctorId);
-        if (doctor is null) throw new CategoryNotFoundException();
+        if (doctor is null) throw new DoctorNotFoundException();
 
         doctor.FirstName = dto.FirstName;
         doctor.LastName = dto.LastName;

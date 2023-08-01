@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using MedSino.Service.Common.Helpers;
 using MedSino.Service.Dtos.Doctors;
 
 namespace MedSino.Service.Validators.Dtos.Doctors;
@@ -12,7 +11,7 @@ public class DoctorCreateValidator : AbstractValidator<DoctorCreateDto>
             .MinimumLength(3).WithMessage("FirstName must be more than 3 characters")
             .MaximumLength(50).WithMessage("FirstName must be less than 50 characters");
 
-        RuleFor(dto => dto.FirstName).NotNull().NotEmpty().WithMessage("Name field is required!")
+        RuleFor(dto => dto.LastName).NotNull().NotEmpty().WithMessage("Name field is required!")
             .MinimumLength(3).WithMessage("LastName must be more than 3 characters")
             .MaximumLength(50).WithMessage("LastName must be less than 50 characters");
 

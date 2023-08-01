@@ -13,7 +13,7 @@ public class UserRepository : BaseRepository, IUserRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "select count(*) from users ";
+            string query = "select count(*) from users where is_delete = false";
             var result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
@@ -71,7 +71,7 @@ public class UserRepository : BaseRepository, IUserRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "SELECT * FROM users where phone_number = @PhoneNumber";
+            string query = "SELECT * FROM users where phone_number = @PhoneNumber and is_delete = false";
             var user = await _connection.QuerySingleAsync<User>(query, new { PhoneNumber = phone });
             return user;
         }
@@ -90,8 +90,10 @@ public class UserRepository : BaseRepository, IUserRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "select * from users order by id desc " +
-                $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
+            string query = "select * from users where is_delete = false " +
+                "order by id desc " +
+                $"offset {@params.GetSkipCount()} limit {@params.PageSize} "; 
+                
 
             var result = (await _connection.QueryAsync<User>(query)).ToList();
             return result;
@@ -114,7 +116,7 @@ public class UserRepository : BaseRepository, IUserRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM users where id=@Id";
+            string query = $"SELECT * FROM users where id=@Id and is_delete = false";
             var result = await _connection.QuerySingleAsync<User>(query, new { Id = id });
             return result;
         }

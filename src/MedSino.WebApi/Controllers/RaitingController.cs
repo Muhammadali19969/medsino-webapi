@@ -1,6 +1,6 @@
 ﻿using MedSino.Service.Dtos.Ratings;
 using MedSino.Service.Interfaces.Raitings;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedSino.WebApi.Controllers
@@ -17,6 +17,7 @@ namespace MedSino.WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> CreateAsync([FromForm] RaitingDto dto)
             => Ok(await _raitingService.CreateAsync(dto));
 

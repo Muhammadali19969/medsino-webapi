@@ -10,5 +10,5 @@ public interface IBookingService
 
     public Task<IList<Booking>> GetByIdDateAsync(long id, string date);
 
-    public Task<UserViewModel?> GetUserViewByDoctorIdDateTime(long doctorId,string time,string date);
+    public Task<UserViewModel?> GetUserViewByDoctorIdDateTime(long doctorId, string time, string date);
 }

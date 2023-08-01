@@ -9,7 +9,6 @@ using MedSino.Service.Dtos.Notifications;
 using MedSino.Service.Dtos.Security;
 using MedSino.Service.Interfaces.Auth;
 using MedSino.Service.Interfaces.Notification;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace MedSino.Service.Services.Auth;
@@ -56,7 +55,7 @@ public class AuthService : IAuthService
     }
 
     public async Task<(bool Result, int CachedVerificationMinutes)> SendCodeForRegisterAsync(string phone)
-    {  
+    {
         if (_memoryCache.TryGetValue(REGISTER_CACHE_KEY + phone, out RegisterDto registerDto))
         {
             VerificationDto verificationDto = new VerificationDto();
@@ -130,7 +129,7 @@ public class AuthService : IAuthService
         user.PasswordHash = hasherResult.Hash;
         user.Salt = hasherResult.Salt;
 
-        user.CreatedAt = user.UpdatedAt  = TimeHelper.GetDateTime();
+        user.CreatedAt = user.UpdatedAt = TimeHelper.GetDateTime();
         user.IdentityRole = Domain.Enums.IdentityRole.User;
 
 

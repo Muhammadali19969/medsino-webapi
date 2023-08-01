@@ -2,8 +2,6 @@
 using MedSino.DataAccess.Interfaces.Bookings;
 using MedSino.DataAccess.ViewModels.Users;
 using MedSino.Domain.Entities.Bookings;
-using MedSino.Domain.Entities.Categories;
-using MedSino.Domain.Entities.Doctors;
 using static Dapper.SqlMapper;
 
 namespace MedSino.DataAccess.Repositories.Bookings;
@@ -20,7 +18,7 @@ public class BookingRepository : BaseRepository, IBookingRepository
             var result = await _connection.ExecuteAsync(query, booking);
             return result;
         }
-        catch 
+        catch
         {
 
             return 0;
@@ -42,7 +40,7 @@ public class BookingRepository : BaseRepository, IBookingRepository
 
             return result;
         }
-        catch 
+        catch
         {
 
             return new List<Booking>();

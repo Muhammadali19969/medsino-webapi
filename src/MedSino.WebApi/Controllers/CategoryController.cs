@@ -2,6 +2,7 @@
 using MedSino.Service.Dtos.Categories;
 using MedSino.Service.Interfaces.Categories;
 using MedSino.Service.Validators.Dtos.Categories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedSino.WebApi.Controllers;
@@ -19,15 +20,18 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
         => Ok(await _service.GetAllAsync(new PaginationParams(page, maxPageSize)));
 
     [HttpGet("count")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CountAsync()
         => Ok(await _service.CountAsync());
 
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateAsync([FromForm] CategoryCreateDto dto)
     {
         var createValidator = new CategoryCreateValidator();
@@ -43,6 +47,8 @@ public class CategoryController : ControllerBase
 
 
     [HttpDelete("{categoryId}")]
+    [Authorize(Roles = "Admin")]
+
     public async Task<IActionResult> DeleteAsync(long categoryId)
         => Ok(await _service.DeleteAsync(categoryId));
 

@@ -1,5 +1,4 @@
-﻿using Gherkin;
-using MedSino.Domain.Entities.Doctors;
+﻿using MedSino.Domain.Entities.Doctors;
 using MedSino.Domain.Entities.Users;
 using MedSino.Service.Common.Helpers;
 using MedSino.Service.Interfaces.Auth;
@@ -13,7 +12,7 @@ namespace MedSino.Service.Services.Auth;
 
 public class TokenService : ITokenService
 {
-    
+
 
     private readonly IConfiguration _config;
     public TokenService(IConfiguration configuration)
@@ -36,7 +35,7 @@ public class TokenService : ITokenService
 
         int expiresHours = int.Parse(_config["Lifetime"]!);
         var token = new JwtSecurityToken(
-            issuer: _config["Issuer"],
+            issuer:  _config["Issuer"],
             audience: _config["Audience"],
             claims: identityClaims,
             expires: TimeHelper.GetDateTime().AddHours(expiresHours),
@@ -46,7 +45,7 @@ public class TokenService : ITokenService
     }
 
 
-    //->Doctor get token
+    //->Doctor generate token
     public string GenerateDoctorToken(Doctor doctor)
     {
         var identityClaims = new Claim[]
@@ -67,7 +66,7 @@ public class TokenService : ITokenService
             audience: _config["Audience"],
             claims: identityClaims,
             expires: TimeHelper.GetDateTime().AddHours(expiresHours),
-            signingCredentials: keyCredentials);
+            signingCredentials: keyCredentials)  ;
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }

@@ -1,10 +1,8 @@
 ﻿using MedSino.DataAccess.Utils;
-using MedSino.Service.Dtos.Doctors;
 using MedSino.Service.Dtos.Users;
 using MedSino.Service.Interfaces.Users;
-using MedSino.Service.Validators.Dtos.Doctors;
 using MedSino.Service.Validators.Dtos.Users;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedSino.WebApi.Controllers
@@ -19,10 +17,11 @@ namespace MedSino.WebApi.Controllers
 
         public UserController(IUserService userService)
         {
-            this._userService=userService;
-    }
+            this._userService = userService;
+        }
 
         [HttpPut("{userId}")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> UpdateAsync(long userId, [FromForm] UserUpdateDto dto)
         {
             var updateValidator = new UserUpdateValidator();
@@ -32,14 +31,17 @@ namespace MedSino.WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
-            => Ok(await _userService.GetAllAsync(new PaginationParams(page,maxPageSize)));
+            => Ok(await _userService.GetAllAsync(new PaginationParams(page, maxPageSize)));
 
         [HttpGet("{userId}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetByIdAsync(long userId)
-            => Ok( await _userService.GetByIdAsync(userId));
+            => Ok(await _userService.GetByIdAsync(userId));
 
         [HttpDelete]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> DeleteAsync(long userId)
             => Ok(await _userService.DeleteAsync(userId));
 

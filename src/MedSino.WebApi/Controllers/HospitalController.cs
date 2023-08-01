@@ -2,6 +2,7 @@
 using MedSino.Service.Dtos.Hospitals;
 using MedSino.Service.Interfaces.Hospitals;
 using MedSino.Service.Validators.Dtos.Hospitals;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedSino.WebApi.Controllers;
@@ -20,10 +21,12 @@ public class HospitalController : ControllerBase
 
 
     [HttpGet("count")]
+    [Authorize(Roles = "User,Admin")]
     public async Task<IActionResult> CountAsync()
         => Ok(await _service.CountAsync());
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateAsync([FromForm] HospitalCreateDto dto)
     {
         var validator = new HospitalCreateValidator();
@@ -33,10 +36,12 @@ public class HospitalController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
         => Ok(await _service.GetAllAsync(new PaginationParams(page, maxPageSize)));
 
     [HttpPut("{hospitalId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateAsync(long hospitalId, [FromForm] HospitalUpdateDto dto)
     {
         var validator = new HospitalUpdateValidator();
@@ -46,11 +51,13 @@ public class HospitalController : ControllerBase
 
     }
 
-    [HttpGet("{hospitalId}")]
+    [HttpGet("get/{hospitalId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetByIdAsync(long hospitalId)
         => Ok(await _service.GetByIdAsync(hospitalId));
 
-    [HttpDelete("{categoryId}")]
+    [HttpDelete("{hospitalId}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteAsync(long categoryId)
         => Ok(await _service.DeleteAsync(categoryId));
 

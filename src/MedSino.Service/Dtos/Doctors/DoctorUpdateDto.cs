@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Security.Cryptography;
 
 namespace MedSino.Service.Dtos.Doctors;
 

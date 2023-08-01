@@ -1,6 +1,6 @@
-using MedSino.WebApi.Middlewares;
 using MedSino.WebApi.Configurations;
 using MedSino.WebApi.Configurations.Layers;
+using MedSino.WebApi.Middlewares;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +18,7 @@ builder.ConfigureServiceLayer();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

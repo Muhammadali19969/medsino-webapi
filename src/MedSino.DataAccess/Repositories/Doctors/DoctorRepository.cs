@@ -13,7 +13,7 @@ public class DoctorRepository : BaseRepository, IDoctorRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "select count(*) from doctors ";
+            string query = "select count(*) from doctors where is_delete = false";
             var result = await _connection.QuerySingleAsync<long>(query);
             return result;
         }
@@ -51,9 +51,23 @@ public class DoctorRepository : BaseRepository, IDoctorRepository
     }
 
 
-    public Task<int> DeleteAsync(long id)
+    public async Task<int> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _connection.OpenAsync();
+            string query = $"update doctors set is_delete=true " +
+                $" where id = {id}";
+            return await _connection.ExecuteAsync(query);
+        }
+        catch
+        {
+            return 0;
+        }
+        finally
+        {
+            await _connection.CloseAsync();
+        }
     }
 
     public async Task<IList<Doctor>> GetAllAsync(PaginationParams @params)
@@ -61,7 +75,8 @@ public class DoctorRepository : BaseRepository, IDoctorRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "select * from doctors order by id desc " +
+            string query = "select * from doctors where is_delete=false " +
+                "order by id desc " +
                 $"offset {@params.GetSkipCount()} limit {@params.PageSize}";
 
             var result = (await _connection.QueryAsync<Doctor>(query)).ToList();
@@ -104,7 +119,7 @@ public class DoctorRepository : BaseRepository, IDoctorRepository
         try
         {
             await _connection.OpenAsync();
-            string query = $"SELECT * FROM doctors where id=@Id";
+            string query = $"SELECT * FROM doctors where id=@Id and is_delete = false";
             var result = await _connection.QuerySingleAsync<Doctor>(query, new { Id = id });
             return result;
         }
@@ -123,7 +138,7 @@ public class DoctorRepository : BaseRepository, IDoctorRepository
         try
         {
             await _connection.OpenAsync();
-            string query = "SELECT * FROM doctors where phone_number = @PhoneNumber";
+            string query = "SELECT * FROM doctors where phone_number = @PhoneNumber and is_delete = false";
             var doctor = await _connection.QuerySingleAsync<Doctor>(query, new { PhoneNumber = phone });
             return doctor;
         }
@@ -149,7 +164,7 @@ public class DoctorRepository : BaseRepository, IDoctorRepository
             await _connection.OpenAsync();
             string query = $"select * from doctors_view " +
                 $"where first_name ilike '%{search}%' or last_name ilike '%{search}%' ";
-                
+
             var result = (await _connection.QueryAsync<DoctorsViewModel>(query)).ToList();
             return result;
         }
@@ -170,9 +185,9 @@ public class DoctorRepository : BaseRepository, IDoctorRepository
         {
             await _connection.OpenAsync();
             string query = "UPDATE public.doctors " +
-                "SET first_name=@FirstName, last_name=@LastName, address=@Address, phone_number = @PhoneNumber, email=@Email, image_path=@ImagePath," +
-                " work_experience=@WorkExperience, region=@Region, district=@District, start_work_time=@StartWorkTime, end_work_time=@EndWorkTime," +
-                " lunch_time=@LunchTime, created_at=@CreatedAt, updated_at=@UpdatedAt, is_male=@IsMail, fees=@Fees " +
+                "SET first_name = @FirstName, last_name = @LastName, address = @Address, phone_number = @PhoneNumber, email = @Email, image_path = @ImagePath, " +
+                " work_experience = @WorkExperience, region = @Region, district = @District, start_work_time = @StartWorkTime, end_work_time = @EndWorkTime," +
+                " lunch_time = @LunchTime, created_at = @CreatedAt, updated_at = @UpdatedAt, is_male = @IsMale, fees = @Fees " +
                 $"WHERE id = {id}";
             var result = await _connection.ExecuteAsync(query, entity);
             return result;

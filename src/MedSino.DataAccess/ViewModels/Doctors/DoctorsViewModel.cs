@@ -1,6 +1,4 @@
-﻿using MedSino.Domain.Entities;
-
-namespace MedSino.DataAccess.ViewModels.Doctors;
+﻿namespace MedSino.DataAccess.ViewModels.Doctors;
 
 public class DoctorsViewModel
 {
